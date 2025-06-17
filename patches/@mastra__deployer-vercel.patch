@@ -1,8 +1,8 @@
 diff --git a/dist/index.js b/dist/index.js
-index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..2922b587f6613972a995e584e007f5e670298438 100644
+index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..8aee6d7a24d7289873a0c3ab52c41aa4ebe260d1 100644
 --- a/dist/index.js
 +++ b/dist/index.js
-@@ -1,82 +1,23 @@
+@@ -1,82 +1,17 @@
 -import * as child_process from 'child_process';
 -import { readFileSync, writeFileSync, readdirSync } from 'fs';
 +import { writeFileSync } from 'fs';
@@ -16,8 +16,6 @@ index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..2922b587f6613972a995e584e007f5e6
 -  projectName;
 -  token;
 -  constructor({ teamSlug, projectName, token }) {
-+  originalOutputDir;
-+  functionOutputDir = join("functions", "index.func");
 +  constructor() {
      super({ name: "VERCEL" });
 -    this.teamSlug = teamSlug;
@@ -83,27 +81,22 @@ index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..2922b587f6613972a995e584e007f5e6
 -      }
 -      throw error;
 -    }
-+    this.originalOutputDir = this.outputDir;
-+    this.outputDir = "output/.vercel/output";
++    this.outputDir = join(this.outputDir, ".vercel", "output", "functions", "index.func");
    }
    async prepare(outputDirectory) {
      await super.prepare(outputDirectory);
-+    this.writeVercelJSON(outputDirectory);
-+  }
-+  async writeInstrumentationFile(outputDirectory) {
-+    await super.writeInstrumentationFile(join(outputDirectory, this.functionOutputDir));
++    this.writeVercelJSON(join(outputDirectory, this.outputDir, "..", ".."));
    }
    getEntry() {
      return `
-@@ -136,72 +77,48 @@ export const OPTIONS = handle(app);
+@@ -136,72 +71,48 @@ export const OPTIONS = handle(app);
  export const HEAD = handle(app);
  `;
    }
 -  writeVercelJSON(outputDirectory, files = ["./*"]) {
 +  writeVercelJSON(outputDirectory) {
-     writeFileSync(
--      join(outputDirectory, this.outputDir, "vercel.json"),
-+      join(outputDirectory, this.outputDir, "config.json"),
++    writeFileSync(
++      join(outputDirectory, "config.json"),
 +      JSON.stringify({
 +        version: 3,
 +        routes: [
@@ -121,11 +114,12 @@ index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..2922b587f6613972a995e584e007f5e6
 +      entryFile,
 +      outputDirectory,
 +      toolsPaths,
-+      join(outputDirectory, this.outputDir, this.functionOutputDir)
++      join(outputDirectory, this.outputDir)
 +    );
 +    const nodeVersion = process.version?.split(".")?.[0]?.replace("v", "") ?? "22";
-+    writeFileSync(
-+      join(outputDirectory, this.outputDir, this.functionOutputDir, ".vc-config.json"),
+     writeFileSync(
+-      join(outputDirectory, this.outputDir, "vercel.json"),
++      join(outputDirectory, this.outputDir, ".vc-config.json"),
        JSON.stringify(
          {
 -          version: 2,
