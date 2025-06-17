@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@mastra/deployer-vercel':
-    hash: 96a784b1c7cbfad636e9a86a972f512d6482c04b8d32d2b6170ff2fe8e73f638
+    hash: 8c9ef14918dc0483b6912c19c14590958bb885d43f717957c2e1bf4a07762a87
     path: patches/@mastra__deployer-vercel.patch
 
 importers:
@@ -21,7 +21,7 @@ importers:
         version: 0.10.5(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67)
       '@mastra/deployer-vercel':
         specifier: ^0.10.5
-        version: 0.10.5(patch_hash=96a784b1c7cbfad636e9a86a972f512d6482c04b8d32d2b6170ff2fe8e73f638)(@mastra/core@0.10.5(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67))(rollup@4.43.0)(typescript@5.8.3)
+        version: 0.10.5(patch_hash=8c9ef14918dc0483b6912c19c14590958bb885d43f717957c2e1bf4a07762a87)(@mastra/core@0.10.5(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67))(rollup@4.43.0)(typescript@5.8.3)
       '@mastra/libsql':
         specifier: ^0.10.2
         version: 0.10.2(@mastra/core@0.10.5(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67))
@@ -4034,7 +4034,7 @@ snapshots:
       - valibot
       - zod-openapi
 
-  '@mastra/deployer-vercel@0.10.5(patch_hash=96a784b1c7cbfad636e9a86a972f512d6482c04b8d32d2b6170ff2fe8e73f638)(@mastra/core@0.10.5(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67))(rollup@4.43.0)(typescript@5.8.3)':
+  '@mastra/deployer-vercel@0.10.5(patch_hash=8c9ef14918dc0483b6912c19c14590958bb885d43f717957c2e1bf4a07762a87)(@mastra/core@0.10.5(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67))(rollup@4.43.0)(typescript@5.8.3)':
     dependencies:
       '@mastra/core': 0.10.5(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67)
       '@mastra/deployer': 0.10.5(@mastra/core@0.10.5(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67))(typescript@5.8.3)
