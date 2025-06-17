@@ -1,0 +1,32 @@
+diff --git a/dist/index.js b/dist/index.js
+index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..6d19f3d2965e7ca41e6608c195b2a1ae9682e24b 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -141,8 +141,14 @@ export const HEAD = handle(app);
+       join(outputDirectory, this.outputDir, "vercel.json"),
+       JSON.stringify(
+         {
+-          version: 2,
+-          installCommand: "npm install --omit=dev",
++          "$schema": "https://openapi.vercel.sh/vercel.json",
++          "version": 2,
++          "installCommand": "npm install --omit=dev",
++          "functions": {
++            "/index.mjs": {
++              "runtime": "nodejs"
++            }
++          },
+           builds: [
+             {
+               src: "index.mjs",
+@@ -152,8 +158,8 @@ export const HEAD = handle(app);
+           ],
+           routes: [
+             {
+-              src: "/(.*)",
+-              dest: "index.mjs"
++              src: "/.*",
++              dest: "/index.mjs"
+             }
+           ]
+         },
