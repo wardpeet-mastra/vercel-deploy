@@ -1,5 +1,5 @@
 diff --git a/dist/index.js b/dist/index.js
-index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..8aee6d7a24d7289873a0c3ab52c41aa4ebe260d1 100644
+index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..db7c070bbd72b1fa116ea44351b31c9cb825fdab 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -1,82 +1,17 @@
@@ -81,7 +81,7 @@ index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..8aee6d7a24d7289873a0c3ab52c41aa4
 -      }
 -      throw error;
 -    }
-+    this.outputDir = join(this.outputDir, ".vercel", "output", "functions", "index.func");
++    this.outputDir = join(".vercel", "output", "functions", "index.func");
    }
    async prepare(outputDirectory) {
      await super.prepare(outputDirectory);
