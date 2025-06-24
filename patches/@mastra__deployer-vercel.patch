@@ -1,12 +1,12 @@
 diff --git a/dist/index.js b/dist/index.js
-index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..8e1267ebe4cb3ee5b240023317dac2f60ef9537a 100644
+index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..57ebbc885a3510b4d953974314a02568d1c92e09 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -1,82 +1,18 @@
 -import * as child_process from 'child_process';
 -import { readFileSync, writeFileSync, readdirSync } from 'fs';
 +import { writeFileSync } from 'fs';
-+import { rename } from 'fs/promises';
++import { move } from 'fs-extra/esm';
  import { join } from 'path';
  import process from 'process';
  import { Deployer } from '@mastra/deployer';
@@ -90,7 +90,7 @@ index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..8e1267ebe4cb3ee5b240023317dac2f6
    }
    getEntry() {
      return `
-@@ -136,72 +72,49 @@ export const OPTIONS = handle(app);
+@@ -136,72 +72,52 @@ export const OPTIONS = handle(app);
  export const HEAD = handle(app);
  `;
    }
@@ -152,12 +152,14 @@ index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..8e1267ebe4cb3ee5b240023317dac2f6
 -    const result = await this._bundle(this.getEntry(), entryFile, outputDirectory, toolsPaths);
 -    const files = readdirSync(join(outputDirectory, this.outputDir), {
 -      recursive: true
--    });
++
++    await move(join(outputDirectory, ".vercel", "output"), join(process.cwd(), ".vercel", "output"), {
++      overwrite: true,
+     });
 -    const filesWithoutNodeModules = files.filter(
 -      (file) => typeof file === "string" && !file.startsWith("node_modules")
 -    );
 -    this.writeVercelJSON(outputDirectory, filesWithoutNodeModules);
-+    await rename(join(outputDirectory, ".vercel"), join(process.cwd(), ".vercel"));
      return result;
    }
 -  async deploy(outputDirectory) {
