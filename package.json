@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.3",
-    "mastra": "^0.10.5",
+    "mastra": "0.10.7-alpha.2",
     "typescript": "^5.8.3"
   }
 }
