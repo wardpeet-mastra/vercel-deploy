@@ -1,11 +1,12 @@
 diff --git a/dist/index.js b/dist/index.js
-index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..db7c070bbd72b1fa116ea44351b31c9cb825fdab 100644
+index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..8e1267ebe4cb3ee5b240023317dac2f60ef9537a 100644
 --- a/dist/index.js
 +++ b/dist/index.js
-@@ -1,82 +1,17 @@
+@@ -1,82 +1,18 @@
 -import * as child_process from 'child_process';
 -import { readFileSync, writeFileSync, readdirSync } from 'fs';
 +import { writeFileSync } from 'fs';
++import { rename } from 'fs/promises';
  import { join } from 'path';
  import process from 'process';
  import { Deployer } from '@mastra/deployer';
@@ -89,7 +90,7 @@ index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..db7c070bbd72b1fa116ea44351b31c9c
    }
    getEntry() {
      return `
-@@ -136,72 +71,48 @@ export const OPTIONS = handle(app);
+@@ -136,72 +72,49 @@ export const OPTIONS = handle(app);
  export const HEAD = handle(app);
  `;
    }
@@ -156,6 +157,7 @@ index 1781dd86094f2936b1f15c84b1c827cdc1875fd6..db7c070bbd72b1fa116ea44351b31c9c
 -      (file) => typeof file === "string" && !file.startsWith("node_modules")
 -    );
 -    this.writeVercelJSON(outputDirectory, filesWithoutNodeModules);
++    await rename(join(outputDirectory, ".vercel"), join(process.cwd(), ".vercel"));
      return result;
    }
 -  async deploy(outputDirectory) {
