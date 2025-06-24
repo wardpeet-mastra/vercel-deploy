@@ -1,2 +1,3 @@
 patchedDependencies:
   '@mastra/deployer-vercel': patches/@mastra__deployer-vercel.patch
+  '@mastra/deployer-netlify': patches/@mastra__deployer-netlify.patch

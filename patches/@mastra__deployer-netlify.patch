@@ -1,0 +1,97 @@
+diff --git a/dist/index.js b/dist/index.js
+index 559d7c9d22ed90a312506a270f7c4d7fdebe0e5a..c6b8baecd2900a10362cbe6b6fac53a52ee0cae6 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1,37 +1,33 @@
+-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+ import { join } from 'path';
++import process from 'process';
+ import { Deployer } from '@mastra/deployer';
+ import { DepsService } from '@mastra/deployer/services';
++import { writeJson, move } from 'fs-extra/esm';
+ 
+ // src/index.ts
+ var NetlifyDeployer = class extends Deployer {
+-  scope;
+-  projectName;
+-  token;
+-  constructor({ scope, projectName, token }) {
++  constructor() {
+     super({ name: "NETLIFY" });
+-    this.scope = scope;
+-    this.projectName = projectName;
+-    this.token = token;
+-  }
+-  writeFiles({ dir }) {
+-    if (!existsSync(join(dir, "netlify/functions/api"))) {
+-      mkdirSync(join(dir, "netlify/functions/api"), { recursive: true });
+-    }
+-    writeFileSync(
+-      join(dir, "netlify.toml"),
+-      `[functions]
+-node_bundler = "esbuild"            
+-directory = "netlify/functions"
+-
+-[[redirects]]
+-force = true
+-from = "/*"
+-status = 200
+-to = "/.netlify/functions/api/:splat"
+-`
+-    );
++    this.outputDir = join(".netlify", "v1", "functions", "api");
+   }
++  //   writeFiles({ dir }: { dir: string }): void {
++  //     if (!existsSync(join(dir, 'netlify/functions/api'))) {
++  //       mkdirSync(join(dir, 'netlify/functions/api'), { recursive: true });
++  //     }
++  //     // TODO ENV KEYS
++  //     writeFileSync(
++  //       join(dir, 'netlify.toml'),
++  //       `[functions]
++  // node_bundler = "esbuild"
++  // directory = "netlify/functions"
++  // [[redirects]]
++  // force = true
++  // from = "/*"
++  // status = 200
++  // to = "/.netlify/functions/api/:splat"
++  // `,
++  //     );
++  //   }
+   async installDependencies(outputDirectory, rootDir = process.cwd()) {
+     const deps = new DepsService(rootDir);
+     deps.__setLogger(this.logger);
+@@ -49,16 +45,29 @@ to = "/.netlify/functions/api/:splat"
+   }
+   async prepare(outputDirectory) {
+     await super.prepare(outputDirectory);
+-    this.writeFiles({ dir: join(outputDirectory, this.outputDir) });
+   }
+   async bundle(entryFile, outputDirectory, toolsPaths) {
+-    return this._bundle(
++    const result = await this._bundle(
+       this.getEntry(),
+       entryFile,
+       outputDirectory,
+       toolsPaths,
+-      join(outputDirectory, this.outputDir, "netlify", "functions", "api")
++      join(outputDirectory, this.outputDir)
+     );
++    await writeJson(join(outputDirectory, ".netlify", "v1", "config.json"), {
++      redirects: [
++        {
++          force: true,
++          from: "/*",
++          to: "/.netlify/functions/api/:splat",
++          status: 200
++        }
++      ]
++    });
++    await move(join(outputDirectory, ".netlify", "v1"), join(process.cwd(), ".netlify", "v1"), {
++      overwrite: true
++    });
++    return result;
+   }
+   getEntry() {
+     return `
